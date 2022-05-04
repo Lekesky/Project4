@@ -220,13 +220,9 @@ public class Main {
                 Collections.sort(list);
                 listTaskPriority();
 
-            } else if (action == 6){
-                serialize(list);
-                System.out.println("Tasks have been serialized");
-
             } else if (action == 0) {
-                System.out.println("Good-bye!");
                 System.exit(0);
+
             } else
                 System.out.println("Invalid action, Please try again..");
             prompt();
@@ -241,6 +237,7 @@ public class Main {
                 Main.main(null);
             }
         }
-        System.out.println("Good-bye!");        //Prints if user initially enters 0
+        serialize(list);
+        System.out.println("Tasks have been saved, Good-bye!");        //Prints if user initially enters 0
     }
 }
