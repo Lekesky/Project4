@@ -4,10 +4,7 @@
 package com.company;
 import com.google.gson.Gson;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.Scanner;
@@ -19,13 +16,21 @@ public class Main {
     static int action;  // Initialize action variable
     static ArrayList <Task> list = new ArrayList<>();     // Create the ArrayList
 
-    static File saveDate = new File("C:\\Users\\113768\\Documents\\GitHub\\Project3");
+    static File saveDate = new File("C:\\Users\\113768\\Downloads\\Project4\\data.json");
     static FileReader fileReader;
     static Gson gson = new Gson();
 
-    static void serialize(ArrayList<Task> a){
+    static {
+        try{
+            fileReader = new FileReader(saveDate);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        String json = gson.toJson(a);
+    static TaskList master = gson.fromJson(fileReader, TaskList.class);
+
+    static void serialize(ArrayList<Task> a){
         try{
             FileWriter writer = new FileWriter("data.json");
             gson.toJson(a, writer);
@@ -103,22 +108,6 @@ public class Main {
                 System.out.println("Select an element to update");
                 input.nextLine();
                 itemUpdateNum = input.nextInt();
-
-
-                // boolean inbounds = false;
-                // while(!(inbounds)){
-                //     if (itemUpdateNum == Main.list.size()-1){
-                //         System.out.println("Number entered is outside of array\nTry again\n");
-                //         tasks.allTasks();
-                //         System.out.println("Select an element to update");
-                //         itemUpdateNum = input.nextInt();
-                //     }
-                //     if((itemUpdateNum == Main.list.size()-1)){
-                //         inbounds = true;
-                //     }
-                // }
-
-
                 update = false;
             }catch(InputMismatchException e){
                 System.out.println("\nMust be an integer");
@@ -164,10 +153,14 @@ public class Main {
 
     public static void listTask(){      //Prints all tasks in the ArrayList
         Collections.sort(list);
-        if(list.size() == 0){
+        if(list.size() == 0 && master == null){
             System.out.println("Array is empty");
         }else{
             tasks.allTasks();
+            if(master != null){
+                System.out.println(master);
+            }
+
         }
     }
 
@@ -223,7 +216,6 @@ public class Main {
 
             } else if (action == 4) {
                 listTask();
-
             } else if (action == 5) {
                 Collections.sort(list);
                 listTaskPriority();
