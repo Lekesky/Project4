@@ -16,7 +16,8 @@ public class Main {
     static int action;  // Initialize action variable
     static ArrayList <Task> list = new ArrayList<>();     // Create the ArrayList
 
-    static File saveDate = new File("C:\\Users\\113768\\Downloads\\Project4\\data.json");
+    static File saveDate = new File("data.json");
+
     static FileReader fileReader;
     static Gson gson = new Gson();
 
@@ -70,7 +71,7 @@ public class Main {
                 input.nextLine();
                 int itemPrior = input.nextInt();
                 Task a = new Task(itemAdd, itemDesc, itemPrior);
-                list.add(a);
+                master.add(a);
                 priority = false;
             }catch(InputMismatchException e){
                 System.out.println("Must be an integer");
@@ -83,11 +84,11 @@ public class Main {
         boolean remove = true;
         while(remove){
             try{
-                System.out.println("List: " + list);
+                System.out.println("List: " + master);
                 System.out.println("What task would you like to remove?");
                 input.nextLine();
                 int itemRemove = input.nextInt();
-                list.remove(itemRemove);
+                master.remove(itemRemove);
                 remove = false;
             }catch(InputMismatchException e){
                 System.out.println("\nMust be an integer");
@@ -132,12 +133,12 @@ public class Main {
                         itemNewPrior = input.nextInt();
                 }
                 Task a = new Task(itemUpdate, itemNewDesc, itemNewPrior);
-                list.set(itemUpdateNum, a);
+                master.set(itemUpdateNum, a);
                 priority = false;
             }catch(InputMismatchException e){
                 System.out.println("Must be an integer");
             }catch (IndexOutOfBoundsException f){
-                if(list.size() == 0){
+                if(master.size() == 0){
                     System.out.println("Array is empty, please add a task first");
                     break;
                 }else{
@@ -152,8 +153,8 @@ public class Main {
     }
 
     public static void listTask(){      //Prints all tasks in the ArrayList
-        Collections.sort(list);
-        if(list.size() == 0 && master == null){
+        Collections.sort(master);
+        if(master == null){
             System.out.println("Array is empty");
         }else{
             tasks.allTasks();
@@ -172,8 +173,9 @@ public class Main {
                 input.nextLine();
                 int priority = input.nextInt();
                 if(priority >= 0 && priority <= 5){
-                    for (Task a: list){     //Prints all task of a specified priority
-                        if (a.priority == priority){
+                    for (Object b: master){     //Prints all task of a specified priority
+                        Task a = (Task) b;
+                        if (( a).getPriority() == priority){
                             System.out.println(a);
                         }
                     }
@@ -218,9 +220,10 @@ public class Main {
                 listTask();
             } else if (action == 5) {
                 Collections.sort(list);
-                listTaskPriority();
+//                listTaskPriority();
 
             } else if (action == 0) {
+                serialize(master);
                 System.exit(0);
 
             } else
@@ -237,7 +240,7 @@ public class Main {
                 Main.main(null);
             }
         }
-        serialize(list);
+
         System.out.println("Tasks have been saved, Good-bye!");        //Prints if user initially enters 0
     }
 }
